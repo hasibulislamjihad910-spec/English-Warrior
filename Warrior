@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>English Warrior</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0b1d3a;
+    color:white;
+}
+
+/* HEADER */
+header{
+    text-align:center;
+    padding:35px;
+    background:#112a52;
+}
+
+h1{
+    color:gold;
+    margin:0;
+}
+
+.sub{
+    margin-top:8px;
+    color:#ddd;
+    font-size:14px;
+}
+
+/* SECTIONS */
+.section{
+    padding:25px;
+    text-align:center;
+}
+
+/* CARD */
+.card{
+    background:#1c3d73;
+    display:inline-block;
+    width:260px;
+    margin:10px;
+    padding:15px;
+    border-radius:10px;
+}
+
+.card img{
+    width:100%;
+    border-radius:10px;
+}
+
+/* BUTTON */
+button{
+    background:gold;
+    border:none;
+    padding:10px 15px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px;
+    border-radius:5px;
+}
+
+/* INPUT */
+input{
+    padding:8px;
+    margin:5px;
+    width:80%;
+}
+
+/* LOGIN */
+#loginBox{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000000e6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.loginForm{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:10px;
+    width:280px;
+    text-align:center;
+}
+
+/* COURSE AREA */
+#courseArea{display:none;}
+
+/* ADMIN */
+#adminPanel{display:none;background:#222;padding:10px;}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:#000000cc;
+}
+
+.modal-box{
+    background:white;
+    color:black;
+    width:300px;
+    margin:100px auto;
+    padding:20px;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginBox">
+<div class="loginForm">
+
+<h3>Login / Register</h3>
+
+<input id="user" placeholder="Username"><br>
+<input id="pass" type="password" placeholder="Password"><br>
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+
+</div>
+</div>
+
+<!-- HEADER -->
+<header>
+<h1>English Warrior</h1>
+<div class="sub">
+Hasibul Islam <br>
+JUST AIS 11th
+</div>
+</header>
+
+<!-- COURSES -->
+<div class="section">
+<h2>Courses</h2>
+
+<div class="card">
+<img src="hsc.jpg">
+<h3>Warrior's HSC English</h3>
+<p>Price: 1500৳</p>
+<button onclick="openForm('HSC English')">Enroll</button>
+<button onclick="openCourse('HSC English')">Enter</button>
+</div>
+
+<div class="card">
+<img src="admission.jpg">
+<h3>Warrior's Admission English</h3>
+<p>Price: 1500৳</p>
+<button onclick="openForm('Admission English')">Enroll</button>
+<button onclick="openCourse('Admission English')">Enter</button>
+</div>
+</div>
+
+<!-- VIDEOS -->
+<div class="section" id="courseArea">
+<h2>Course Videos</h2>
+<div id="videos"></div>
+</div>
+
+<!-- EXAM -->
+<div class="section">
+<h2>Exam Batch</h2>
+<p>DU / RU Units</p>
+<p>Price: 150৳</p>
+<button onclick="openForm('Exam Batch')">Join</button>
+</div>
+
+<!-- BOOK -->
+<div class="section">
+<h2>Book</h2>
+<p>Price: 500৳</p>
+<button onclick="openForm('Book')">Buy</button>
+</div>
+
+<!-- PDF -->
+<div class="section">
+<h2>Important PDF</h2>
+<a href="pdf1.pdf" download><button>Download PDF</button></a>
+</div>
+
+<!-- CONTACT -->
+<div class="section">
+<h2>Contact</h2>
+
+<a href="https://www.facebook.com/profile.php?id=61573261565320"><button>Facebook</button></a>
+<a href="https://youtube.com/@hasibulislam-pv7wp?si=Guw9y1jZfmd6ilLv"><button>YouTube</button></a>
+<a href="https://wa.me/8801601422827"><button>WhatsApp</button></a>
+</div>
+
+<!-- ADMIN -->
+<div class="section">
+<h2>Admin Panel</h2>
+
+<input id="adminPass" placeholder="Admin Password">
+<button onclick="openAdmin()">Enter</button>
+
+<div id="adminPanel">
+
+<input id="cname" placeholder="Course Name">
+<input id="vtitle" placeholder="Video Title">
+<input id="vlink" placeholder="YouTube Embed Link">
+
+<button onclick="addVideo()">Add Video</button>
+
+</div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box">
+
+<h3>Payment Form</h3>
+
+<input id="name" placeholder="Name"><br>
+<input id="phone" placeholder="Phone"><br>
+<input id="bkash" placeholder="bKash Number"><br>
+<input id="trx" placeholder="Transaction ID"><br>
+
+<button onclick="send()">Submit</button>
+<button onclick="closeForm()">Close</button>
+
+</div>
+</div>
+
+<script>
+
+let currentUser = null;
+let currentCourse = "";
+
+/* LOGIN */
+function login(){
+    let u = user.value;
+    let p = pass.value;
+
+    let users = JSON.parse(localStorage.getItem("users")||"{}");
+
+    if(users[u] && users[u]==p){
+        currentUser = u;
+        loginBox.style.display="none";
+    }else{
+        alert("Wrong Login");
+    }
+}
+
+/* REGISTER */
+function register(){
+    let u = user.value;
+    let p = pass.value;
+
+    let users = JSON.parse(localStorage.getItem("users")||"{}");
+
+    users[u]=p;
+    localStorage.setItem("users",JSON.stringify(users));
+
+    alert("Registered");
+}
+
+/* COURSE OPEN */
+function openCourse(name){
+
+    if(!currentUser){
+        alert("Login First");
+        return;
+    }
+
+    currentCourse = name;
+
+    document.getElementById("courseArea").style.display="block";
+
+    loadVideos();
+}
+
+/* VIDEO SYSTEM */
+function loadVideos(){
+
+    let videos = JSON.parse(localStorage.getItem("videos")||"[]");
+
+    let box = document.getElementById("videos");
+    box.innerHTML="";
+
+    videos.forEach(v=>{
+        if(v.course == currentCourse){
+            box.innerHTML += `
+            <div class="card">
+                <h3>${v.title}</h3>
+                <iframe width="100%" height="150"
+                src="${v.link}" frameborder="0" allowfullscreen></iframe>
+            </div>`;
+        }
+    });
+}
+
+/* ADMIN */
+function openAdmin(){
+    if(adminPass.value=="admin123"){
+        adminPanel.style.display="block";
+    }else{
+        alert("Wrong Password");
+    }
+}
+
+/* ADD VIDEO */
+function addVideo(){
+
+    let videos = JSON.parse(localStorage.getItem("videos")||"[]");
+
+    videos.push({
+        course:cname.value,
+        title:vtitle.value,
+        link:vlink.value
+    });
+
+    localStorage.setItem("videos",JSON.stringify(videos));
+
+    alert("Video Added");
+}
+
+/* PAYMENT */
+function openForm(course){
+    currentCourse = course;
+    modal.style.display="block";
+}
+
+function closeForm(){
+    modal.style.display="none";
+}
+
+function send(){
+
+    let msg =
+`Course: ${currentCourse}
+Name: ${name.value}
+Phone: ${phone.value}
+bKash: ${bkash.value}
+TRX: ${trx.value}`;
+
+    window.open("https://wa.me/8801601422827?text="+encodeURIComponent(msg));
+
+}
+
+</script>
+
+</body>
+</html>
